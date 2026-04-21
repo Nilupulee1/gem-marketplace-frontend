@@ -3,6 +3,7 @@ import { Container, Row, Col, Card, Nav, Button, Badge, ListGroup } from 'react-
 import { useAuthStore } from '../../store/authStore';
 import { gemAPI } from '../../api/axios';
 import { Gem as GemIcon, TrendingUp, Package, AlertCircle, Plus } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import MyPortfolio from './MyPortfolio';
 import AddGemForm from './AddGemForm';
 import AuctionsPage from './Auctions';
@@ -12,7 +13,8 @@ import type { Gem } from "../../types";
 type TabType = 'dashboard' | 'portfolio' | 'auctions' | 'addGem';
 
 const SellerDashboard = () => {
-  const { user } = useAuthStore();
+  const { user, logout } = useAuthStore();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<TabType>('dashboard');
   const [myGems, setMyGems] = useState<Gem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -70,6 +72,11 @@ const SellerDashboard = () => {
     },
   ];
 
+  const handleSignOut = () => {
+    logout();
+    navigate('/login');
+  };
+
   const renderContent = () => {
     switch (activeTab) {
       case 'portfolio':
@@ -85,7 +92,7 @@ const SellerDashboard = () => {
         return (
           <>
             {/* Welcome Section */}
-            <div className="mb-4">
+            <div className="dashboard-title">
               <h4 className="mb-1">Welcome back, {user?.name?.split(' ')[0]}</h4>
               <p className="text-muted">Here's a summary of your gem portfolio and recent activity.</p>
             </div>
@@ -93,14 +100,14 @@ const SellerDashboard = () => {
             {/* Stats Cards */}
             <Row className="g-4 mb-4">
               <Col md={4}>
-                <Card className="border-0 shadow-sm h-100">
+                <Card className="stat-card h-100">
                   <Card.Body>
                     <div className="d-flex justify-content-between align-items-start mb-2">
                       <div>
                         <p className="text-muted mb-1 small">Total Portfolio Value</p>
                         <h3 className="mb-0">Rs.{stats.totalValue.toLocaleString()}</h3>
                       </div>
-                      <div className="bg-primary bg-opacity-10 p-2 rounded">
+                      <div className="stat-icon bg-primary bg-opacity-10">
                         <TrendingUp className="text-primary" size={24} />
                       </div>
                     </div>
@@ -110,14 +117,14 @@ const SellerDashboard = () => {
               </Col>
 
               <Col md={4}>
-                <Card className="border-0 shadow-sm h-100">
+                <Card className="stat-card h-100">
                   <Card.Body>
                     <div className="d-flex justify-content-between align-items-start mb-2">
                       <div>
                         <p className="text-muted mb-1 small">Active Listings</p>
                         <h3 className="mb-0">{stats.activeListings}</h3>
                       </div>
-                      <div className="bg-success bg-opacity-10 p-2 rounded">
+                      <div className="stat-icon bg-success bg-opacity-10">
                         <Package className="text-success" size={24} />
                       </div>
                     </div>
@@ -127,14 +134,14 @@ const SellerDashboard = () => {
               </Col>
 
               <Col md={4}>
-                <Card className="border-0 shadow-sm h-100">
+                <Card className="stat-card h-100">
                   <Card.Body>
                     <div className="d-flex justify-content-between align-items-start mb-2">
                       <div>
                         <p className="text-muted mb-1 small">Pending Verification</p>
                         <h3 className="mb-0">{stats.pendingVerification}</h3>
                       </div>
-                      <div className="bg-warning bg-opacity-10 p-2 rounded">
+                      <div className="stat-icon bg-warning bg-opacity-10">
                         <AlertCircle className="text-warning" size={24} />
                       </div>
                     </div>
@@ -147,7 +154,7 @@ const SellerDashboard = () => {
             {/* My Listings Section */}
             <Row>
               <Col lg={8}>
-                <Card className="border-0 shadow-sm mb-4">
+                <Card className="content-card mb-4">
                   <Card.Body>
                     <div className="d-flex justify-content-between align-items-center mb-3">
                       <h5 className="mb-0">My Listings</h5>
@@ -197,7 +204,7 @@ const SellerDashboard = () => {
                       <Row className="g-3">
                         {myGems.slice(0, 4).map((gem) => (
                           <Col md={6} key={gem._id}>
-                            <Card className="border">
+                            <Card className="surface-muted">
                               <div 
                                 className="position-relative"
                                 style={{ height: '200px', overflow: 'hidden' }}
@@ -240,7 +247,7 @@ const SellerDashboard = () => {
 
               {/* Recent Activity */}
               <Col lg={4}>
-                <Card className="border-0 shadow-sm">
+                <Card className="content-card">
                   <Card.Body>
                     <h5 className="mb-3">Recent Activity</h5>
                     <ListGroup variant="flush">
@@ -274,60 +281,56 @@ const SellerDashboard = () => {
   };
 
   return (
-    <Container fluid className="py-4" style={{ backgroundColor: '#f8f9fa', minHeight: '100vh' }}>
+    <Container fluid className="dashboard-shell">
       <Row className="g-0">
         {/* Sidebar */}
         <Col lg={2} className="pe-lg-3">
-          <Card className="border-0 shadow-sm mb-4">
+          <Card className="sidebar-card mb-4">
             <Card.Body className="text-center py-4">
               <div 
-                className="rounded-circle bg-primary bg-opacity-10 mx-auto mb-3 d-flex align-items-center justify-content-center"
+                className="rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center"
                 style={{ width: '80px', height: '80px' }}
               >
                 <span className="display-6">👤</span>
               </div>
               <h6 className="mb-1">{user?.name}</h6>
-              <Badge bg="primary" className="mb-0">Collector</Badge>
+              <span className="profile-chip">Collector</span>
             </Card.Body>
           </Card>
 
           <Nav className="flex-column">
             <Nav.Link
-              className={`d-flex align-items-center mb-2 rounded ${
-                activeTab === 'dashboard' ? 'bg-primary text-white' : 'text-dark'
+              className={`sidebar-nav-link ${
+                activeTab === 'dashboard' ? 'active' : ''
               }`}
               onClick={() => setActiveTab('dashboard')}
-              style={{ cursor: 'pointer' }}
             >
               <GemIcon size={18} className="me-2" />
               Dashboard
             </Nav.Link>
             <Nav.Link
-              className={`d-flex align-items-center mb-2 rounded ${
-                activeTab === 'portfolio' ? 'bg-primary text-white' : 'text-dark'
+              className={`sidebar-nav-link ${
+                activeTab === 'portfolio' ? 'active' : ''
               }`}
               onClick={() => setActiveTab('portfolio')}
-              style={{ cursor: 'pointer' }}
             >
               <Package size={18} className="me-2" />
               My Portfolio
             </Nav.Link>
             <Nav.Link
-              className={`d-flex align-items-center mb-2 rounded ${
-                activeTab === 'auctions' ? 'bg-primary text-white' : 'text-dark'
+              className={`sidebar-nav-link ${
+                activeTab === 'auctions' ? 'active' : ''
               }`}
               onClick={() => setActiveTab('auctions')}
-              style={{ cursor: 'pointer' }}
             >
               <TrendingUp size={18} className="me-2" />
               Auctions
             </Nav.Link>
             <Nav.Link
-              className={`d-flex align-items-center mb-2 rounded ${
-                activeTab === 'addGem' ? 'bg-primary text-white' : 'text-dark'
+              className={`sidebar-nav-link ${
+                activeTab === 'addGem' ? 'active' : ''
               }`}
               onClick={() => setActiveTab('addGem')}
-              style={{ cursor: 'pointer' }}
             >
               <Plus size={18} className="me-2" />
               Add New Gem
@@ -340,7 +343,7 @@ const SellerDashboard = () => {
             <AlertCircle size={16} className="me-2" />
             Settings
           </Button>
-          <Button variant="outline-danger" size="sm" className="w-100 mt-2">
+          <Button variant="outline-danger" size="sm" className="w-100 mt-2" onClick={handleSignOut}>
             Sign Out
           </Button>
         </Col>

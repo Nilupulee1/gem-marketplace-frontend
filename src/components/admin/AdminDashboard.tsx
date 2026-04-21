@@ -57,7 +57,7 @@ const AdminDashboard = () => {
       default:
         return (
           <>
-            <div className="mb-4">
+            <div className="dashboard-title">
               <h4 className="fw-bold">Admin Dashboard</h4>
               <p className="text-muted mb-0">Overview of platform statistics and activities</p>
             </div>
@@ -65,14 +65,14 @@ const AdminDashboard = () => {
             {/* Statistics Cards */}
             <Row className="g-4 mb-4">
               <Col md={4}>
-                <Card className="border-0 shadow-sm h-100">
+                <Card className="stat-card h-100">
                   <Card.Body>
                     <div className="d-flex justify-content-between align-items-start mb-3">
                       <div>
                         <p className="text-muted mb-1 small">Total Users</p>
                         <h3 className="mb-0">{stats.totalUsers}</h3>
                       </div>
-                      <div className="bg-primary bg-opacity-10 p-3 rounded">
+                      <div className="stat-icon bg-primary bg-opacity-10">
                         <Users className="text-primary" size={24} />
                       </div>
                     </div>
@@ -82,14 +82,14 @@ const AdminDashboard = () => {
               </Col>
 
               <Col md={4}>
-                <Card className="border-0 shadow-sm h-100">
+                <Card className="stat-card h-100">
                   <Card.Body>
                     <div className="d-flex justify-content-between align-items-start mb-3">
                       <div>
                         <p className="text-muted mb-1 small">Total Gems</p>
                         <h3 className="mb-0">{stats.totalGems}</h3>
                       </div>
-                      <div className="bg-success bg-opacity-10 p-3 rounded">
+                      <div className="stat-icon bg-success bg-opacity-10">
                         <Package className="text-success" size={24} />
                       </div>
                     </div>
@@ -101,14 +101,14 @@ const AdminDashboard = () => {
               </Col>
 
               <Col md={4}>
-                <Card className="border-0 shadow-sm h-100">
+                <Card className="stat-card h-100">
                   <Card.Body>
                     <div className="d-flex justify-content-between align-items-start mb-3">
                       <div>
                         <p className="text-muted mb-1 small">Active Auctions</p>
                         <h3 className="mb-0">{stats.activeAuctions}</h3>
                       </div>
-                      <div className="bg-warning bg-opacity-10 p-3 rounded">
+                      <div className="stat-icon bg-warning bg-opacity-10">
                         <TrendingUp className="text-warning" size={24} />
                       </div>
                     </div>
@@ -121,7 +121,7 @@ const AdminDashboard = () => {
             {/* Quick Actions */}
             <Row className="g-4">
               <Col md={6}>
-                <Card className="border-0 shadow-sm">
+                <Card className="content-card">
                   <Card.Body>
                     <div className="d-flex justify-content-between align-items-center mb-3">
                       <h5 className="mb-0">Pending Verifications</h5>
@@ -145,7 +145,7 @@ const AdminDashboard = () => {
               </Col>
 
               <Col md={6}>
-                <Card className="border-0 shadow-sm">
+                <Card className="content-card">
                   <Card.Body>
                     <div className="d-flex justify-content-between align-items-center mb-3">
                       <h5 className="mb-0">Approved Gems</h5>
@@ -174,11 +174,11 @@ const AdminDashboard = () => {
   };
 
   return (
-    <Container fluid className="py-4" style={{ backgroundColor: '#f8f9fa', minHeight: '100vh' }}>
+    <Container fluid className="dashboard-shell">
       <Row className="g-0">
         {/* Sidebar */}
         <Col lg={2} className="pe-lg-3">
-          <Card className="border-0 shadow-sm mb-4">
+          <Card className="sidebar-card mb-4">
             <Card.Body className="text-center py-4">
               <div 
                 className="rounded-circle bg-danger bg-opacity-10 mx-auto mb-3 d-flex align-items-center justify-content-center"
@@ -187,27 +187,25 @@ const AdminDashboard = () => {
                 <AlertCircle className="text-danger" size={40} />
               </div>
               <h6 className="mb-1">{user?.name}</h6>
-              <span className="badge bg-danger">Administrator</span>
+              <span className="profile-chip">Administrator</span>
             </Card.Body>
           </Card>
 
           <Nav className="flex-column">
             <Nav.Link
-              className={`d-flex align-items-center mb-2 rounded ${
-                activeTab === 'dashboard' ? 'bg-primary text-white' : 'text-dark'
+              className={`sidebar-nav-link ${
+                activeTab === 'dashboard' ? 'active' : ''
               }`}
               onClick={() => setActiveTab('dashboard')}
-              style={{ cursor: 'pointer' }}
             >
               <TrendingUp size={18} className="me-2" />
               Dashboard
             </Nav.Link>
             <Nav.Link
-              className={`d-flex align-items-center mb-2 rounded ${
-                activeTab === 'pending-gems' ? 'bg-primary text-white' : 'text-dark'
+              className={`sidebar-nav-link ${
+                activeTab === 'pending-gems' ? 'active' : ''
               }`}
               onClick={() => setActiveTab('pending-gems')}
-              style={{ cursor: 'pointer' }}
             >
               <Clock size={18} className="me-2" />
               Pending Gems
@@ -216,21 +214,19 @@ const AdminDashboard = () => {
               )}
             </Nav.Link>
             <Nav.Link
-              className={`d-flex align-items-center mb-2 rounded ${
-                activeTab === 'users' ? 'bg-primary text-white' : 'text-dark'
+              className={`sidebar-nav-link ${
+                activeTab === 'users' ? 'active' : ''
               }`}
               onClick={() => setActiveTab('users')}
-              style={{ cursor: 'pointer' }}
             >
               <Users size={18} className="me-2" />
               User Management
             </Nav.Link>
             <Nav.Link
-              className={`d-flex align-items-center mb-2 rounded ${
-                activeTab === 'auctions' ? 'bg-primary text-white' : 'text-dark'
+              className={`sidebar-nav-link ${
+                activeTab === 'auctions' ? 'active' : ''
               }`}
               onClick={() => setActiveTab('auctions')}
-              style={{ cursor: 'pointer' }}
             >
               <Package size={18} className="me-2" />
               Auctions

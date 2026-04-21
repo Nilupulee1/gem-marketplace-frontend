@@ -1,32 +1,15 @@
 import { useState, useEffect } from 'react';
-import { Row, Col, Card, Button, Form, Table, Badge, InputGroup, Pagination, Modal } from 'react-bootstrap';
+import { Row, Col, Card, Button, Form, Table, InputGroup, Pagination, Modal } from 'react-bootstrap';
 import { Search, Download, Plus, Eye, Trash2 } from 'lucide-react';
-import type { Gem } from '../../types';
+import type { Gem, Auction } from '../../types';
 import { gemAPI, auctionAPI } from '../../api/axios';
 import CreateAuctionModal from './CreateAuctionModal';
-
-interface Auction {
-  _id: string;
-  gem: {
-    _id: string;
-    type: string;
-    images: string[];
-    certificate: {
-      certificateNumber: string;
-    };
-  };
-  winner?: {
-    name: string;
-  };
-  endTime: string;
-  currentBid: number;
-  status: string;
-}
 
 const AuctionsPage = () => {
   const [auctions, setAuctions] = useState<Auction[]>([]);
   const [myGems, setMyGems] = useState<Gem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState('');
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [selectedGem, setSelectedGem] = useState<Gem | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
@@ -44,11 +27,13 @@ const AuctionsPage = () => {
   const fetchAuctions = async () => {
     try {
       setLoading(true);
-      const response = await auctionAPI.getActiveAuctions();
+      setErrorMessage('');
+      const response = await auctionAPI.getMyAuctions();
       setAuctions(response.data.auctions || []);
     } catch (error) {
       console.error('Error fetching auctions:', error);
       setAuctions([]);
+      setErrorMessage('Failed to load auctions. Please refresh and try again.');
     } finally {
       setLoading(false);
     }
@@ -84,8 +69,7 @@ const AuctionsPage = () => {
     if (!selectedAuction) return;
 
     try {
-      console.log('Delete auction:', selectedAuction._id);
-      alert('Delete functionality will be implemented with backend API');
+      await auctionAPI.deleteAuction(selectedAuction._id);
       setShowDeleteModal(false);
       setSelectedAuction(null);
       fetchAuctions();
@@ -97,13 +81,13 @@ const AuctionsPage = () => {
   const getStatusBadge = (status: string) => {
     switch (status?.toLowerCase()) {
       case 'active':
-        return <Badge bg="success" className="px-3">Active</Badge>;
+        return <span className="status-pill active">Active</span>;
       case 'ended':
-        return <Badge bg="secondary" className="px-3">Ended</Badge>;
+        return <span className="status-pill ended">Ended</span>;
       case 'cancelled':
-        return <Badge bg="danger" className="px-3">Canceled</Badge>;
+        return <span className="status-pill cancelled">Canceled</span>;
       default:
-        return <Badge bg="info" className="px-3">Active</Badge>;
+        return <span className="status-pill info">Active</span>;
     }
   };
 
@@ -116,69 +100,12 @@ const AuctionsPage = () => {
     return `Rs.${amount.toLocaleString()}`;
   };
 
-  // Mock data for demonstration (remove when real data is available)
-  const mockAuctions: Auction[] = [
-    {
-      _id: '1',
-      gem: {
-        _id: '1',
-        type: 'Burmese Sapphire',
-        images: ['https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=400'],
-        certificate: { certificateNumber: 'RT #123456' }
-      },
-      winner: { name: 'Erin Lewis' },
-      endTime: '2025-05-12',
-      currentBid: 550000,
-      status: 'active'
-    },
-    {
-      _id: '2',
-      gem: {
-        _id: '2',
-        type: 'Ceylon Sapphire',
-        images: ['https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400'],
-        certificate: { certificateNumber: 'RT #123457' }
-      },
-      winner: { name: 'John Doe' },
-      endTime: '2025-05-15',
-      currentBid: 650000,
-      status: 'active'
-    },
-    {
-      _id: '3',
-      gem: {
-        _id: '3',
-        type: 'Ruby Stone',
-        images: ['https://images.unsplash.com/photo-1611955167811-4711904bb9f8?w=400'],
-        certificate: { certificateNumber: 'RT #123458' }
-      },
-      winner: { name: 'Sarah Smith' },
-      endTime: '2025-05-20',
-      currentBid: 450000,
-      status: 'ended'
-    },
-    {
-      _id: '4',
-      gem: {
-        _id: '4',
-        type: 'Emerald Green',
-        images: ['https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?w=400'],
-        certificate: { certificateNumber: 'RT #123459' }
-      },
-      endTime: '2025-05-18',
-      currentBid: 750000,
-      status: 'active'
-    }
-  ];
-
-  const displayAuctions = auctions.length > 0 ? auctions : mockAuctions;
-
   return (
     <div>
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <div>
+      <div className="d-flex justify-content-between align-items-center mb-4 animate-fade-up">
+        <div className="dashboard-title mb-0">
           <h2 className="mb-1 fw-bold">Auctions</h2>
-          <p className="text-muted mb-0">Review all your past auctions</p>
+          <p>Review all your past auctions</p>
         </div>
         <Button 
           variant="primary" 
@@ -190,7 +117,7 @@ const AuctionsPage = () => {
         </Button>
       </div>
 
-      <Card className="border-0 shadow-sm">
+      <Card className="content-card animate-fade-up delay-1">
         <Card.Body className="p-4">
           {/* Filters and Search */}
           <Row className="mb-4 align-items-center">
@@ -243,13 +170,19 @@ const AuctionsPage = () => {
           </Row>
 
           {/* Auctions Table */}
+          {errorMessage && (
+            <div className="alert alert-warning" role="alert">
+              {errorMessage}
+            </div>
+          )}
+
           {loading ? (
             <div className="text-center py-5">
               <div className="spinner-border text-primary" role="status">
                 <span className="visually-hidden">Loading...</span>
               </div>
             </div>
-          ) : displayAuctions.length === 0 ? (
+          ) : auctions.length === 0 ? (
             <div className="text-center py-5">
               <p className="text-muted mb-3">No auctions found</p>
               <Button variant="primary" onClick={() => setShowCreateModal(true)}>
@@ -259,8 +192,8 @@ const AuctionsPage = () => {
           ) : (
             <>
               <div className="table-responsive">
-                <Table hover className="align-middle">
-                  <thead className="bg-light">
+                <Table hover className="align-middle surface-table">
+                  <thead>
                     <tr>
                       <th className="border-0 py-3">Gem Details</th>
                       <th className="border-0 py-3">Winner</th>
@@ -271,16 +204,15 @@ const AuctionsPage = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {displayAuctions.map((auction) => (
+                    {auctions.map((auction) => (
                       <tr key={auction._id}>
                         <td>
                           <div className="d-flex align-items-center">
                             <div 
-                              className="rounded me-3"
+                              className="rounded me-3 surface-muted"
                               style={{ 
                                 width: '50px', 
                                 height: '50px',
-                                backgroundColor: '#f0f0f0',
                                 overflow: 'hidden'
                               }}
                             >
@@ -295,9 +227,9 @@ const AuctionsPage = () => {
                               />
                             </div>
                             <div>
-                              <div className="fw-semibold">{auction.gem?.type || 'Burmese Sapphire'}</div>
+                              <div className="fw-semibold">{auction.gem?.type || '-'}</div>
                               <small className="text-muted">
-                                {auction.gem?.certificate?.certificateNumber || 'RT #123456'}
+                                {auction.gem?.certificate?.certificateNumber || '-'}
                               </small>
                             </div>
                           </div>
@@ -336,7 +268,7 @@ const AuctionsPage = () => {
 
               {/* Pagination */}
               <div className="d-flex justify-content-between align-items-center mt-3">
-                <small className="text-muted">Showing 1-{displayAuctions.length} of {displayAuctions.length}</small>
+                <small className="text-muted">Showing 1-{auctions.length} of {auctions.length}</small>
                 <Pagination className="mb-0">
                   <Pagination.Prev disabled />
                   <Pagination.Item active>{1}</Pagination.Item>

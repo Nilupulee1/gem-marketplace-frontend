@@ -193,15 +193,21 @@ const AddGemForm = ({ onSuccess }: AddGemFormProps) => {
     switch (currentStep) {
       case 1:
         return (
-          <div>
+          <div className="animate-fade-up">
             <h4 className="mb-1 fw-bold">List Your Gem for Verification</h4>
             <p className="text-muted mb-4">Step 1 of 3: Gem Details</p>
 
+            <div className="step-progress-label">
+              <span className="step-dot active" />
+              <span className="step-dot" />
+              <span className="step-dot" />
+              Core Attributes
+            </div>
             <ProgressBar now={33} className="mb-4" style={{ height: '8px' }} />
 
             {error && <Alert variant="danger" dismissible onClose={() => setError('')}>{error}</Alert>}
 
-            <Card className="border-0 shadow-sm">
+            <Card className="content-card animate-fade-up delay-1">
               <Card.Body className="p-4">
                 <div className="mb-4">
                   <h5 className="fw-bold mb-3">Core Attributes</h5>
@@ -219,7 +225,7 @@ const AddGemForm = ({ onSuccess }: AddGemFormProps) => {
                           value={formData.gemName}
                           onChange={handleChange}
                           placeholder="e.g The Azure Ocean Diamond"
-                          style={{ backgroundColor: '#f8f9fa' }}
+                          className="surface-muted"
                           required
                         />
                       </Form.Group>
@@ -233,7 +239,7 @@ const AddGemForm = ({ onSuccess }: AddGemFormProps) => {
                           value={formData.type}
                           onChange={handleChange}
                           placeholder="Ruby"
-                          style={{ backgroundColor: '#f8f9fa' }}
+                          className="surface-muted"
                           required
                         />
                       </Form.Group>
@@ -248,7 +254,7 @@ const AddGemForm = ({ onSuccess }: AddGemFormProps) => {
                           value={formData.caratWeight}
                           onChange={handleChange}
                           placeholder="e.g 2.5"
-                          style={{ backgroundColor: '#f8f9fa' }}
+                          className="surface-muted"
                           required
                         />
                       </Form.Group>
@@ -262,7 +268,7 @@ const AddGemForm = ({ onSuccess }: AddGemFormProps) => {
                           value={formData.cut}
                           onChange={handleChange}
                           placeholder="Oval"
-                          style={{ backgroundColor: '#f8f9fa' }}
+                          className="surface-muted"
                           required
                         />
                       </Form.Group>
@@ -276,7 +282,7 @@ const AddGemForm = ({ onSuccess }: AddGemFormProps) => {
                           value={formData.color}
                           onChange={handleChange}
                           placeholder="Red"
-                          style={{ backgroundColor: '#f8f9fa' }}
+                          className="surface-muted"
                           required
                         />
                       </Form.Group>
@@ -290,7 +296,7 @@ const AddGemForm = ({ onSuccess }: AddGemFormProps) => {
                           value={formData.origin}
                           onChange={handleChange}
                           placeholder="Madagascar"
-                          style={{ backgroundColor: '#f8f9fa' }}
+                          className="surface-muted"
                           required
                         />
                       </Form.Group>
@@ -310,7 +316,7 @@ const AddGemForm = ({ onSuccess }: AddGemFormProps) => {
                     value={formData.story}
                     onChange={handleChange}
                     placeholder="Describe the history, provenance or unique qualities of your gem..."
-                    style={{ backgroundColor: '#f8f9fa' }}
+                    className="surface-muted"
                   />
                 </div>
 
@@ -333,15 +339,21 @@ const AddGemForm = ({ onSuccess }: AddGemFormProps) => {
 
       case 2:
         return (
-          <div>
+          <div className="animate-fade-up">
             <h4 className="mb-1 fw-bold">Upload Media & Certificates</h4>
             <p className="text-muted mb-4">Step 2 of 3: Media Upload</p>
 
+            <div className="step-progress-label">
+              <span className="step-dot active" />
+              <span className="step-dot active" />
+              <span className="step-dot" />
+              Media and Verification Assets
+            </div>
             <ProgressBar now={66} className="mb-4" style={{ height: '8px' }} />
 
             {error && <Alert variant="danger" dismissible onClose={() => setError('')}>{error}</Alert>}
 
-            <Card className="border-0 shadow-sm">
+            <Card className="content-card animate-fade-up delay-1">
               <Card.Body className="p-4">
                 <div className="mb-4">
                   <h5 className="fw-bold mb-3">Gem Visuals</h5>
@@ -349,14 +361,7 @@ const AddGemForm = ({ onSuccess }: AddGemFormProps) => {
                     Upload hi-resolution files (e.g., Jds, Jdds, Jtech). Videos are encouraged.
                   </p>
 
-                  <div 
-                    className="border rounded p-5 text-center"
-                    style={{ 
-                      backgroundColor: '#f8f9fa',
-                      borderStyle: 'dashed',
-                      borderWidth: '2px'
-                    }}
-                  >
+                  <div className="upload-dropzone p-5 text-center">
                     <Upload size={48} className="text-muted mb-3 mx-auto d-block" />
                     <p className="text-muted mb-3">Click to upload or drag and Drop</p>
                     <Form.Control
@@ -405,14 +410,7 @@ const AddGemForm = ({ onSuccess }: AddGemFormProps) => {
                     Upload reports from recognized labs (e.g., GIA, GRSI, IGI) or high-res images.
                   </p>
 
-                  <div 
-                    className="border rounded p-5 text-center"
-                    style={{ 
-                      backgroundColor: '#f8f9fa',
-                      borderStyle: 'dashed',
-                      borderWidth: '2px'
-                    }}
-                  >
+                  <div className="upload-dropzone p-5 text-center">
                     <Upload size={48} className="text-muted mb-3 mx-auto d-block" />
                     <p className="text-muted mb-3">Click to Upload Certificate</p>
                     <Form.Control
@@ -453,16 +451,22 @@ const AddGemForm = ({ onSuccess }: AddGemFormProps) => {
 
       case 3:
         return (
-          <div>
+          <div className="animate-fade-up">
             <h4 className="mb-1 fw-bold">Finalize Your Listing</h4>
             <p className="text-muted mb-4">Step 3 of 3</p>
 
+            <div className="step-progress-label">
+              <span className="step-dot active" />
+              <span className="step-dot active" />
+              <span className="step-dot active" />
+              Listing and Publication Settings
+            </div>
             <ProgressBar now={100} className="mb-4" style={{ height: '8px' }} />
 
             {error && <Alert variant="danger" dismissible onClose={() => setError('')}>{error}</Alert>}
             {success && <Alert variant="success">{success}</Alert>}
 
-            <Card className="border-0 shadow-sm">
+            <Card className="content-card animate-fade-up delay-1">
               <Card.Body className="p-4">
                 <div className="mb-4">
                   <h5 className="fw-bold mb-3">Listing Type</h5>
@@ -470,11 +474,10 @@ const AddGemForm = ({ onSuccess }: AddGemFormProps) => {
                   <Row className="g-3">
                     <Col md={4}>
                       <div
-                        className={`p-4 border rounded text-center ${
-                          listingType === 'portfolio' ? 'border-primary bg-primary bg-opacity-10' : ''
+                        className={`p-4 text-center choice-card ${
+                          listingType === 'portfolio' ? 'active' : ''
                         }`}
                         onClick={() => setListingType('portfolio')}
-                        style={{ cursor: 'pointer' }}
                       >
                         <h6 className="fw-bold mb-2">Portfolio</h6>
                         <small className="text-muted">
@@ -484,11 +487,10 @@ const AddGemForm = ({ onSuccess }: AddGemFormProps) => {
                     </Col>
                     <Col md={4}>
                       <div
-                        className={`p-4 border rounded text-center ${
-                          listingType === 'fixed' ? 'border-primary bg-primary bg-opacity-10' : ''
+                        className={`p-4 text-center choice-card ${
+                          listingType === 'fixed' ? 'active' : ''
                         }`}
                         onClick={() => setListingType('fixed')}
-                        style={{ cursor: 'pointer' }}
                       >
                         <h6 className="fw-bold mb-2">Fixed Price</h6>
                         <small className="text-muted">
@@ -498,11 +500,10 @@ const AddGemForm = ({ onSuccess }: AddGemFormProps) => {
                     </Col>
                     <Col md={4}>
                       <div
-                        className={`p-4 border rounded text-center ${
-                          listingType === 'auction' ? 'border-primary bg-primary bg-opacity-10' : ''
+                        className={`p-4 text-center choice-card ${
+                          listingType === 'auction' ? 'active' : ''
                         }`}
                         onClick={() => setListingType('auction')}
-                        style={{ cursor: 'pointer' }}
                       >
                         <h6 className="fw-bold mb-2">Auction</h6>
                         <small className="text-muted">
@@ -519,11 +520,10 @@ const AddGemForm = ({ onSuccess }: AddGemFormProps) => {
                     <h5 className="fw-bold mb-3">Portfolio Settings</h5>
                     
                     <div
-                      className={`p-3 border rounded mb-2 ${
-                        portfolioDisplay === 'public' ? 'border-primary bg-primary bg-opacity-10' : ''
+                      className={`p-3 mb-2 choice-card ${
+                        portfolioDisplay === 'public' ? 'active' : ''
                       }`}
                       onClick={() => setPortfolioDisplay('public')}
-                      style={{ cursor: 'pointer' }}
                     >
                       <h6 className="fw-bold mb-1">Public Display</h6>
                       <small className="text-muted">
@@ -532,11 +532,10 @@ const AddGemForm = ({ onSuccess }: AddGemFormProps) => {
                     </div>
 
                     <div
-                      className={`p-3 border rounded ${
-                        portfolioDisplay === 'private' ? 'border-primary bg-primary bg-opacity-10' : ''
+                      className={`p-3 choice-card ${
+                        portfolioDisplay === 'private' ? 'active' : ''
                       }`}
                       onClick={() => setPortfolioDisplay('private')}
-                      style={{ cursor: 'pointer' }}
                     >
                       <h6 className="fw-bold mb-1">Private Display</h6>
                       <small className="text-muted">
@@ -558,7 +557,7 @@ const AddGemForm = ({ onSuccess }: AddGemFormProps) => {
                         value={fixedPrice}
                         onChange={(e) => setFixedPrice(e.target.value)}
                         placeholder="Rs 5,000"
-                        style={{ backgroundColor: '#f8f9fa' }}
+                        className="surface-muted"
                         size="lg"
                         required
                       />
@@ -569,7 +568,7 @@ const AddGemForm = ({ onSuccess }: AddGemFormProps) => {
                       <Form.Select
                         value={duration}
                         onChange={(e) => setDuration(e.target.value)}
-                        style={{ backgroundColor: '#f8f9fa' }}
+                        className="surface-muted"
                         size="lg"
                       >
                         <option value="7">7 Days</option>
@@ -592,7 +591,7 @@ const AddGemForm = ({ onSuccess }: AddGemFormProps) => {
                         value={auctionStartingBid}
                         onChange={(e) => setAuctionStartingBid(e.target.value)}
                         placeholder="Rs 50,000"
-                        style={{ backgroundColor: '#f8f9fa' }}
+                        className="surface-muted"
                         size="lg"
                         required
                       />
@@ -605,7 +604,7 @@ const AddGemForm = ({ onSuccess }: AddGemFormProps) => {
                         value={minimumBidIncrement}
                         onChange={(e) => setMinimumBidIncrement(e.target.value)}
                         placeholder="Rs 5,000"
-                        style={{ backgroundColor: '#f8f9fa' }}
+                        className="surface-muted"
                         size="lg"
                         required
                       />
@@ -618,7 +617,7 @@ const AddGemForm = ({ onSuccess }: AddGemFormProps) => {
                           <Form.Select
                             value={duration}
                             onChange={(e) => setDuration(e.target.value)}
-                            style={{ backgroundColor: '#f8f9fa' }}
+                            className="surface-muted"
                             size="lg"
                           >
                             <option value="3">3 days</option>
@@ -637,7 +636,7 @@ const AddGemForm = ({ onSuccess }: AddGemFormProps) => {
                             value={startDate}
                             onChange={(e) => setStartDate(e.target.value)}
                             placeholder="mm/dd/yyyy"
-                            style={{ backgroundColor: '#f8f9fa' }}
+                            className="surface-muted"
                             size="lg"
                             min={new Date().toISOString().split('T')[0]}
                           />

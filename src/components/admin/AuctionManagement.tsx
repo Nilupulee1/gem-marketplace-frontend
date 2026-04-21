@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Card, Table, Badge, Button, Modal } from 'react-bootstrap';
+import { Card, Table, Button, Modal } from 'react-bootstrap';
 import { Eye, TrendingUp } from 'lucide-react';
 import { auctionAPI } from '../../api/axios';
 
@@ -59,13 +59,13 @@ const AuctionManagement = () => {
   const getStatusBadge = (status: string) => {
     switch (status.toLowerCase()) {
       case 'active':
-        return <Badge bg="success">Active</Badge>;
+        return <span className="status-pill active">Active</span>;
       case 'ended':
-        return <Badge bg="secondary">Ended</Badge>;
+        return <span className="status-pill ended">Ended</span>;
       case 'cancelled':
-        return <Badge bg="danger">Cancelled</Badge>;
+        return <span className="status-pill cancelled">Cancelled</span>;
       default:
-        return <Badge bg="info">{status}</Badge>;
+        return <span className="status-pill info text-capitalize">{status}</span>;
     }
   };
 
@@ -86,12 +86,12 @@ const AuctionManagement = () => {
 
   return (
     <div>
-      <div className="mb-4">
+      <div className="dashboard-title animate-fade-up">
         <h4 className="fw-bold">Auction Management</h4>
-        <p className="text-muted mb-0">Monitor and manage all auctions on the platform</p>
+        <p>Monitor and manage all auctions on the platform</p>
       </div>
 
-      <Card className="border-0 shadow-sm">
+      <Card className="content-card animate-fade-up delay-1">
         <Card.Body className="p-4">
           {loading ? (
             <div className="text-center py-5">
@@ -107,8 +107,8 @@ const AuctionManagement = () => {
             </div>
           ) : (
             <div className="table-responsive">
-              <Table hover className="align-middle">
-                <thead className="bg-light">
+              <Table hover className="align-middle surface-table">
+                <thead>
                   <tr>
                     <th className="border-0 py-3">Gem</th>
                     <th className="border-0 py-3">Seller</th>
@@ -126,12 +126,11 @@ const AuctionManagement = () => {
                       <td>
                         <div className="d-flex align-items-center">
                           <div 
-                            className="rounded me-3"
+                            className="rounded me-3 surface-muted"
                             style={{ 
                               width: '50px', 
                               height: '50px',
-                              overflow: 'hidden',
-                              backgroundColor: '#f0f0f0'
+                              overflow: 'hidden'
                             }}
                           >
                             <img 
@@ -154,7 +153,7 @@ const AuctionManagement = () => {
                       <td>{formatCurrency(auction.startPrice)}</td>
                       <td className="fw-bold text-success">{formatCurrency(auction.currentBid)}</td>
                       <td>
-                        <Badge bg="primary">{auction.bids.length}</Badge>
+                        <span className="status-pill info">{auction.bids.length}</span>
                       </td>
                       <td>
                         <small>{formatDate(auction.endTime)}</small>

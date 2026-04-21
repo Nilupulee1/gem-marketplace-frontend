@@ -64,7 +64,9 @@ export const auctionAPI = {
   placeBid: (data: { auctionId: string; amount: number }) =>
     axiosInstance.post('/auctions/bid', data),
   getActiveAuctions: () => axiosInstance.get('/auctions/active'),
+  getMyAuctions: () => axiosInstance.get('/auctions/my-auctions'),
   getAuctionById: (id: string) => axiosInstance.get(`/auctions/${id}`),
+  deleteAuction: (id: string) => axiosInstance.delete(`/auctions/${id}`),
 };
 
 export const adminAPI = {

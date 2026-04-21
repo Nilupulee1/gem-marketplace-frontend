@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore';
 import { UserRole } from '../../types';
-import { LogOut } from 'lucide-react';
+import { LogOut, Home } from 'lucide-react';
 import { Container, Nav, Navbar, Button } from 'react-bootstrap';
 import logo from '../../assets/logo.png';
 
@@ -39,53 +39,59 @@ const Header = () => {
   };
 
   return (
-    <Navbar bg="white" expand="lg" className="shadow-sm">
+    <Navbar expand="lg" className="market-navbar py-2">
       <Container>
         <Navbar.Brand 
           href="/" 
           onClick={handleBrandClick}
-          className="d-flex align-items-center"
+          className="d-flex align-items-center gap-2"
         >
-          
-        <img 
+          <img 
             src={logo} 
             alt="GemFolio Logo" 
-            style={{ height: '65px' }} 
-        />
-        <span className="fw-bold fs-2 mb-1">GemFolio</span>
+            style={{ height: '54px' }} 
+          />
+          <span className="brand-wordmark">GemFolio</span>
         </Navbar.Brand>
 
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         
         <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
-          <Nav className="align-items-center">
+          <Nav className="align-items-center gap-2">
             {isAuthenticated ? (
               <>
                 <Nav.Link 
                   href={getDashboardLink()} 
                   onClick={handleDashboardClick}
-                  className="me-3"
+                  className="nav-link-clean d-flex align-items-center gap-1"
                 >
+                  <Home size={16} />
                   Dashboard
                 </Nav.Link>
-                <span className="text-muted me-3 d-none d-md-inline">
-                  {user?.name} ({user?.role})
+                <span
+                  className="d-none d-md-inline px-3 py-2 rounded-2"
+                  style={{ background: '#eef2f6', color: '#425061', fontWeight: 600, border: '1px solid #d9e3ee' }}
+                >
+                  {user?.name} ({user?.role.toUpperCase()})
                 </span>
                 <Button
                   variant="outline-danger"
                   size="sm"
                   onClick={handleLogout}
-                  className="d-flex align-items-center"
+                  className="d-flex align-items-center gap-1"
                 >
-                  <LogOut size={16} className="me-1" />
+                  <LogOut size={16} />
                   Logout
                 </Button>
               </>
             ) : (
               <>
+                <Nav.Link href="#" className="nav-link-clean d-none d-lg-block">Features</Nav.Link>
+                <Nav.Link href="#" className="nav-link-clean d-none d-lg-block">How It Works</Nav.Link>
+                <Nav.Link href="#" className="nav-link-clean d-none d-lg-block">Security</Nav.Link>
                 <Button
                   variant="link"
-                  className="me-2 text-decoration-none"
+                  className="text-decoration-none nav-link-clean"
                   onClick={() => navigate('/login')}
                 >
                   Login
@@ -95,7 +101,7 @@ const Header = () => {
                   size="sm"
                   onClick={() => navigate('/register')}
                 >
-                  Register
+                  Get Started
                 </Button>
               </>
             )}

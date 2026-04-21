@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Card, Table, Badge, Button, Modal, Form, InputGroup } from 'react-bootstrap';
+import { Card, Table, Button, Modal, Form, InputGroup } from 'react-bootstrap';
 import { Search, UserX, UserCheck } from 'lucide-react';
 import { adminAPI } from '../../api/axios';
 import type { AdminUser } from '../../types/admin';
@@ -36,27 +36,27 @@ const UserManagement = () => {
   const getRoleBadge = (role: string) => {
     switch (role) {
       case 'admin':
-        return <Badge bg="danger">Admin</Badge>;
+        return <span className="status-pill danger">Admin</span>;
       case 'seller':
-        return <Badge bg="primary">Seller</Badge>;
+        return <span className="status-pill info">Seller</span>;
       case 'buyer':
-        return <Badge bg="success">Buyer</Badge>;
+        return <span className="status-pill verified">Buyer</span>;
       default:
-        return <Badge bg="secondary">{role}</Badge>;
+        return <span className="status-pill default text-capitalize">{role}</span>;
     }
   };
 
   const getStatusBadge = (isVerified: boolean) => {
     return isVerified ? (
-      <Badge bg="success">
+      <span className="status-pill verified">
         <UserCheck size={14} className="me-1" />
         Verified
-      </Badge>
+      </span>
     ) : (
-      <Badge bg="warning">
+      <span className="status-pill warning">
         <UserX size={14} className="me-1" />
         Unverified
-      </Badge>
+      </span>
     );
   };
 
@@ -78,12 +78,12 @@ const UserManagement = () => {
 
   return (
     <div>
-      <div className="mb-4">
+      <div className="dashboard-title animate-fade-up">
         <h4 className="fw-bold">User Management</h4>
-        <p className="text-muted mb-0">Manage all registered users on the platform</p>
+        <p>Manage all registered users on the platform</p>
       </div>
 
-      <Card className="border-0 shadow-sm">
+      <Card className="content-card animate-fade-up delay-1">
         <Card.Body className="p-4">
           <div className="d-flex gap-3 mb-4">
             <InputGroup style={{ maxWidth: '400px' }}>
@@ -121,8 +121,8 @@ const UserManagement = () => {
             </div>
           ) : (
             <div className="table-responsive">
-              <Table hover className="align-middle">
-                <thead className="bg-light">
+              <Table hover className="align-middle surface-table">
+                <thead>
                   <tr>
                     <th className="border-0 py-3">User</th>
                     <th className="border-0 py-3">Email</th>
@@ -175,15 +175,15 @@ const UserManagement = () => {
               Showing {filteredUsers.length} of {users.length} users
             </small>
             <div className="d-flex gap-2">
-              <Badge bg="primary" className="px-3 py-2">
+              <span className="status-pill info">
                 Sellers: {users.filter(u => u.role === 'seller').length}
-              </Badge>
-              <Badge bg="success" className="px-3 py-2">
+              </span>
+              <span className="status-pill verified">
                 Buyers: {users.filter(u => u.role === 'buyer').length}
-              </Badge>
-              <Badge bg="danger" className="px-3 py-2">
+              </span>
+              <span className="status-pill danger">
                 Admins: {users.filter(u => u.role === 'admin').length}
-              </Badge>
+              </span>
             </div>
           </div>
         </Card.Body>

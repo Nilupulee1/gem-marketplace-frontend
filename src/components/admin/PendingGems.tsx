@@ -91,9 +91,9 @@ const PendingGems = ({ onApprove }: PendingGemsProps) => {
 
   return (
     <div>
-      <div className="mb-4">
+      <div className="dashboard-title animate-fade-up">
         <h4 className="fw-bold">Pending Gem Verifications</h4>
-        <p className="text-muted mb-0">Review and approve gem listings before they go live</p>
+        <p>Review and approve gem listings before they go live</p>
       </div>
 
       {error && !showReviewModal && (
@@ -102,7 +102,7 @@ const PendingGems = ({ onApprove }: PendingGemsProps) => {
         </Alert>
       )}
 
-      <Card className="border-0 shadow-sm">
+      <Card className="content-card animate-fade-up delay-1">
         <Card.Body className="p-4">
           {loading ? (
             <div className="text-center py-5">
@@ -118,8 +118,8 @@ const PendingGems = ({ onApprove }: PendingGemsProps) => {
             </div>
           ) : (
             <div className="table-responsive">
-              <Table hover className="align-middle">
-                <thead className="bg-light">
+              <Table hover className="align-middle surface-table">
+                <thead>
                   <tr>
                     <th className="border-0 py-3">Gem Details</th>
                     <th className="border-0 py-3">Seller</th>
@@ -135,12 +135,11 @@ const PendingGems = ({ onApprove }: PendingGemsProps) => {
                       <td>
                         <div className="d-flex align-items-center">
                           <div 
-                            className="rounded me-3"
+                            className="rounded me-3 surface-muted"
                             style={{ 
                               width: '60px', 
                               height: '60px',
-                              overflow: 'hidden',
-                              backgroundColor: '#f0f0f0'
+                              overflow: 'hidden'
                             }}
                           >
                             <img 

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Row, Col, Card, Button, Badge, Form, Modal } from 'react-bootstrap';
+import { Row, Col, Card, Button, Form, Modal } from 'react-bootstrap';
 import { Eye, Edit2, Trash2 } from 'lucide-react';
 import type { Gem } from '../../types';
 import GemDetailsModal from './GemDetailsModal';
@@ -19,13 +19,13 @@ const MyPortfolio = ({ gems, onRefresh }: MyPortfolioProps) => {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'approved':
-        return <Badge bg="success">Approved</Badge>;
+        return <span className="status-pill approved">Approved</span>;
       case 'pending':
-        return <Badge bg="warning">Pending</Badge>;
+        return <span className="status-pill pending">Pending</span>;
       case 'rejected':
-        return <Badge bg="danger">Rejected</Badge>;
+        return <span className="status-pill rejected">Rejected</span>;
       default:
-        return <Badge bg="secondary">{status}</Badge>;
+        return <span className="status-pill default text-capitalize">{status}</span>;
     }
   };
 
@@ -67,10 +67,10 @@ const MyPortfolio = ({ gems, onRefresh }: MyPortfolioProps) => {
 
   return (
     <div>
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <div>
+      <div className="d-flex justify-content-between align-items-center mb-4 animate-fade-up">
+        <div className="dashboard-title mb-0">
           <h4>Collector Portfolio</h4>
-          <p className="text-muted mb-0">Manage and organize your gem collection</p>
+          <p>Manage and organize your gem collection</p>
         </div>
         <Form.Select 
           style={{ width: 'auto' }} 
@@ -86,7 +86,7 @@ const MyPortfolio = ({ gems, onRefresh }: MyPortfolioProps) => {
       </div>
 
       {filteredGems.length === 0 ? (
-        <Card className="border-0 shadow-sm">
+        <Card className="content-card animate-fade-up delay-1">
           <Card.Body className="text-center py-5">
             <p className="text-muted mb-3">
               {gems.length === 0 
@@ -102,8 +102,8 @@ const MyPortfolio = ({ gems, onRefresh }: MyPortfolioProps) => {
         <Row className="g-4">
           {filteredGems.map((gem) => (
             <Col md={6} lg={4} key={gem._id}>
-              <Card className="border-0 shadow-sm h-100 hover-card">
-                <div className="position-relative" style={{ height: '250px', overflow: 'hidden', backgroundColor: '#f8f9fa' }}>
+              <Card className="content-card h-100 hover-card animate-fade-up delay-1">
+                <div className="position-relative surface-muted" style={{ height: '250px', overflow: 'hidden' }}>
                   <img
                     src={gem.images[0] || 'https://via.placeholder.com/300x250'}
                     alt={gem.type}
